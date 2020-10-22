@@ -297,7 +297,7 @@ public class DataTree {
         procDataNode.addChild(quotaChildZookeeper);
         nodes.put(quotaZookeeper, quotaDataNode);
 
-        addConfigNode();
+        addConfigNodetest();
 
         nodeDataSize.set(approximateDataSize());
         try {
@@ -313,7 +313,7 @@ public class DataTree {
      * create a /zookeeper/config node for maintaining the configuration (membership and quorum system) info for
      * zookeeper
      */
-    public void addConfigNode() {
+    public void addConfigNodetestTest() {
         DataNode zookeeperZnode = nodes.get(procZookeeper);
         if (zookeeperZnode != null) { // should always be the case
             zookeeperZnode.addChild(configChildZookeeper);
@@ -367,7 +367,7 @@ public class DataTree {
         to.setVersion(from.getVersion());
         to.setEphemeralOwner(from.getEphemeralOwner());
         to.setDataLength(from.getDataLength());
-        to.setNumChildren(from.getNumChildren());
+        to.setNumChildrentest(from.getNumChildrentest());
     }
 
     /**
@@ -487,7 +487,7 @@ public class DataTree {
             // we did for the global sessions.
             Long longval = aclCache.convertAcls(acl);
 
-            Set<String> children = parent.getChildren();
+            Set<String> children = parent.getChildrentest();
             if (children.contains(childName)) {
                 throw new KeeperException.NodeExistsException();
             }
@@ -551,7 +551,7 @@ public class DataTree {
         }
         updateWriteStat(path, bytes);
         dataWatches.triggerWatch(path, Event.EventType.NodeCreated);
-        childWatches.triggerWatch(parentName.equals("") ? "/" : parentName, Event.EventType.NodeChildrenChanged);
+        childWatches.triggerWatch(parentName.equals("") ? "/" : parentName, Event.EventType.NodeChildrentestChanged);
     }
 
     /**
@@ -649,7 +649,7 @@ public class DataTree {
 
         WatcherOrBitSet processed = dataWatches.triggerWatch(path, EventType.NodeDeleted);
         childWatches.triggerWatch(path, EventType.NodeDeleted, processed);
-        childWatches.triggerWatch("".equals(parentName) ? "/" : parentName, EventType.NodeChildrenChanged);
+        childWatches.triggerWatch("".equals(parentName) ? "/" : parentName, EventType.NodeChildrentestChanged);
     }
 
     public Stat setData(String path, byte[] data, int version, long zxid, long time) throws KeeperException.NoNodeException {
@@ -740,7 +740,7 @@ public class DataTree {
         return stat;
     }
 
-    public List<String> getChildren(String path, Stat stat, Watcher watcher) throws KeeperException.NoNodeException {
+    public List<String> getChildrentest(String path, Stat stat, Watcher watcher) throws KeeperException.NoNodeException {
         DataNode n = nodes.get(path);
         if (n == null) {
             throw new KeeperException.NoNodeException();
@@ -750,7 +750,7 @@ public class DataTree {
             if (stat != null) {
                 n.copyStat(stat);
             }
-            children = new ArrayList<String>(n.getChildren());
+            children = new ArrayList<String>(n.getChildrentest());
 
             if (watcher != null) {
                 childWatches.addWatch(path, watcher);
@@ -766,7 +766,7 @@ public class DataTree {
         return children;
     }
 
-    public int getAllChildrenNumber(String path) {
+    public int getAllChildrentestNumber(String path) {
         //cull out these two keys:"", "/"
         if ("/".equals(path)) {
             return nodes.size() - 2;
@@ -1227,7 +1227,7 @@ public class DataTree {
         String[] children = null;
         int len = 0;
         synchronized (node) {
-            Set<String> childs = node.getChildren();
+            Set<String> childs = node.getChildrentest();
             children = childs.toArray(new String[childs.size()]);
             len = (node.data == null ? 0 : node.data.length);
         }
@@ -1274,7 +1274,7 @@ public class DataTree {
         DataNode node = getNode(path);
         String[] children = null;
         synchronized (node) {
-            Set<String> childs = node.getChildren();
+            Set<String> childs = node.getChildrentest();
             children = childs.toArray(new String[childs.size()]);
         }
         if (children.length == 0) {
@@ -1333,7 +1333,7 @@ public class DataTree {
             //we do not need to make a copy of node.data because the contents
             //are never changed
             nodeCopy = new DataNode(node.data, node.acl, statCopy);
-            Set<String> childs = node.getChildren();
+            Set<String> childs = node.getChildrentest();
             children = childs.toArray(new String[childs.size()]);
         }
         serializeNodeData(oa, pathString, nodeCopy);
@@ -1550,7 +1550,7 @@ public class DataTree {
             if (node == null) {
                 watcher.process(new WatchedEvent(EventType.NodeDeleted, KeeperState.SyncConnected, path));
             } else if (node.stat.getPzxid() > relativeZxid) {
-                watcher.process(new WatchedEvent(EventType.NodeChildrenChanged, KeeperState.SyncConnected, path));
+                watcher.process(new WatchedEvent(EventType.NodeChildrentestChanged, KeeperState.SyncConnected, path));
             } else {
                 this.childWatches.addWatch(path, watcher);
             }
@@ -1605,7 +1605,7 @@ public class DataTree {
     public boolean containsWatcher(String path, WatcherType type, Watcher watcher) {
         boolean containsWatcher = false;
         switch (type) {
-        case Children:
+        case Childrentest:
             containsWatcher = this.childWatches.containsWatcher(path, watcher);
             break;
         case Data:
@@ -1626,7 +1626,7 @@ public class DataTree {
     public boolean removeWatch(String path, WatcherType type, Watcher watcher) {
         boolean removed = false;
         switch (type) {
-        case Children:
+        case Childrentest:
             removed = this.childWatches.removeWatcher(path, watcher);
             break;
         case Data:
