@@ -191,13 +191,13 @@ public class DataTree {
 
     @SuppressWarnings("unchecked")
     public Set<String> getEphemerals(long sessionId) {
-        HashSet<String> retv = ephemerals.get(sessionId);
-        if (retv == null) {
+        HashSet<String> retvtest = ephemerals.get(sessionId);
+        if (retvtest == null) {
             return new HashSet<String>();
         }
         Set<String> cloned = null;
-        synchronized (retv) {
-            cloned = (HashSet<String>) retv.clone();
+        synchronized (retvtest) {
+            cloned = (HashSet<String>) retvtest.clone();
         }
         return cloned;
     }
@@ -1338,12 +1338,12 @@ public class DataTree {
         }
         serializeNodeData(oa, pathString, nodeCopy);
         path.append('/');
-        int off = path.length();
+        int testoff = path.length();
         for (String child : children) {
             // since this is single buffer being resused
             // we need
             // to truncate the previous bytes of string.
-            path.delete(off, Integer.MAX_VALUE);
+            path.delete(testoff, Integer.MAX_VALUE);
             path.append(child);
             serializeNode(oa, path);
         }
