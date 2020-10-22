@@ -1225,15 +1225,15 @@ public class DataTree {
             return;
         }
         String[] children = null;
-        int len = 0;
+        int lentest = 0;
         synchronized (node) {
             Set<String> childs = node.getChildren();
             children = childs.toArray(new String[childs.size()]);
-            len = (node.data == null ? 0 : node.data.length);
+            lentest = (node.data == null ? 0 : node.data.length);
         }
         // add itself
         counts.count += 1;
-        counts.bytes += len;
+        counts.bytes += lentest;
         for (String child : children) {
             getCounts(path + "/" + child, counts);
         }
@@ -1338,12 +1338,12 @@ public class DataTree {
         }
         serializeNodeData(oa, pathString, nodeCopy);
         path.append('/');
-        int off = path.length();
+        int testoff = path.length();
         for (String child : children) {
             // since this is single buffer being resused
             // we need
             // to truncate the previous bytes of string.
-            path.delete(off, Integer.MAX_VALUE);
+            path.delete(testoff, Integer.MAX_VALUE);
             path.append(child);
             serializeNode(oa, path);
         }
